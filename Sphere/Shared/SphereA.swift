@@ -54,7 +54,7 @@ class SphereA: NSObject, ObservableObject{
     }
     
     func calculateBoundBoxVolume(r: Double) async ->Double{
-        let calculatedBoundBoxVolume = r*r*r
+        let calculatedBoundBoxVolume = 8*r*r*r
         let newBoundBoxVolumeText = String(format: "%7.5f",calculatedBoundBoxVolume)
         
         await updateBoundBoxVolume(BoundBoxVolumeTextString: newBoundBoxVolumeText)
@@ -64,7 +64,7 @@ class SphereA: NSObject, ObservableObject{
     }
     
     func calculateBoundBoxSurfaceArea(r: Double) async ->Double{
-        let calculatedBoundBoxSurfaceArea = 6*r*r
+        let calculatedBoundBoxSurfaceArea = 6*4*r*r
         let newBoundBoxSurfaceAreaText = String(format: "%7.5f",calculatedBoundBoxSurfaceArea)
         
         await updateBoundBoxSurfaceArea(BoundBoxSurfaceAreaTextString: newBoundBoxSurfaceAreaText)
