@@ -64,7 +64,7 @@ class SphereA: NSObject, ObservableObject{
     }
     
     func calculateBoundBoxSurfaceArea(r: Double) async ->Double{
-        let calculatedBoundBoxSurfaceArea = 6*r
+        let calculatedBoundBoxSurfaceArea = 6*r*r
         let newBoundBoxSurfaceAreaText = String(format: "%7.5f",calculatedBoundBoxSurfaceArea)
         
         await updateBoundBoxSurfaceArea(BoundBoxSurfaceAreaTextString: newBoundBoxSurfaceAreaText)
