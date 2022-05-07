@@ -1,0 +1,178 @@
+
+%
+\documentclass[%
+ reprint,
+%superscriptaddress,
+%groupedaddress,
+%unsortedaddress,
+%runinaddress,
+%frontmatterverbose, 
+%preprint,
+%preprintnumbers,
+%nofootinbib,
+%nobibnotes,
+%bibnotes,
+ amsmath,amssymb,
+ aps,
+%pra,
+%prb,
+%rmp,
+%prstab,
+%prstper,
+%floatfix,
+]{revtex4-2}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{graphicx}% Include figure files
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{bm}% bold math
+%\usepackage{hyperref}% add hypertext capabilities
+%\usepackage[mathlines]{lineno}% Enable numbering of text and display math
+%\linenumbers\relax % Commence numbering lines
+
+%\usepackage[showframe,%Uncomment any one of the following lines to test 
+%%scale=0.7, marginratio={1:1, 2:3}, ignoreall,% default settings
+%%text={7in,10in},centering,
+%%margin=1.5in,
+%%total={6.5in,8.75in}, top=1.2in, left=0.9in, includefoot,
+%%height=10in,a5paper,hmargin={3cm,0.8in},
+%]{geometry}
+
+\begin{document}
+
+\preprint{APS/123-QED}
+
+\title{Physics 440 Final Project:\\Band Structures and Pseudopotential Form Factors for Fourteen Semiconductors of the Diamond and Zinc-blende Structures }% Force line breaks with \\
+
+
+\author{Jasmine Panthee}
+ \altaffiliation[]{Physics Department, Illinois Institute of Technology.}%Lines break automatically or can be forced with \\
+ \email{Second.Author@institution.edu}
+
+
+
+\date{\today}% It is always \today, today,
+             %  but any date may be explicitly specified
+
+\begin{abstract}
+This project is on reproducting pseudopotential form factors and band structures for 14 semiconductors of the diamond and zincblende structures: AlSb,CdTe,GaAs,GaP,GaSb,Ge,InAs,InP,InSb,Si,Sn,Zn,S,ZnSe, and ZnTe from the paper "Band Structures and Pseudopotential Form Factors for the Fourteen Semiconductors of the Diamond and Zinc-Blende Structures. 
+\end{abstract}
+
+%\keywords{Suggested keywords}%Use showkeys class option if keyword
+                              %display desired
+\maketitle
+
+%\tableofcontents
+
+\section{\label{sec:level1}1. Introduction:\protect \lowercase{via} \textbackslash\textbackslash}
+
+Pseudopotential method after its development in 1959 by Philips and Kleinman has become an important tool for the study of electron band structure in solids and the electron behavior in crystals.This method has been very successful, in terms of both computing memory and time complexity, in determining the potential experienced by an electron in a lattice without the exact potential of an electron in the lattice.   
+
+This method uses the assumption that core electrons are frozen in place near the nuclei, and only the valence and conduction band electrons which are well beyond the nucleus are to be considered and they move in the remaining potential which we are calling the pseudopotential/ The potentials can be evaluated empirically from the crystalline energy levels which is called the empirically pseudopotential method.
+
+In this project, the empirical pseudopotential is extended according to the paper to include semiconductors with the zincblende structure and band structures for the 14 semiconductors are presented and these results are helpful for interpreting reflectivity and photoemission results.
+
+
+\subsection{\label{sec:level2}Theory: The Peudopotential Hamiltonian}
+The Hamiltonian for an electron in a crystal is a sum of the kinetic-energy and potential energy terms. 
+
+\begin{equation}
+\hat{H} = \hat{T}+\hat{V}
+\end{equation}
+
+\begin{equation}
+=-\frac{\hbar^2}{2m}\nabla^2 + V(\vec{r}
+\end{equation}
+
+The potentials experienced by the valence band electrons and the conduction band electrons can be Fourier expanded into plane waves and split into symmetric and anti symmetric parts. 
+
+\begin{equation}
+\hat{V(\vec{r})}= \sum_{\vec{G}}^\infty {\hat{V}_{\vec{G}}e^{-i\vec{G}\vec{r}}}
+                = \sum_{\vec{G}}^\infty {(V_G^S cos{\vec{G}}.\vec{\tau}+ i V_G^A sin \vec{G}.\vec{\tau})}
+\end{equation}
+
+As described above, the Hamiltonian for this problem is split into two parts: the kinetic term and potential term. Separate functions were written for both.
+
+The kinetic term takes the wave vector(\textbf{k}) and reciprocal lattice vector(\textbf{g}) as the input and calculates the kinetic energy term as: 
+
+\begin {equation}
+\hat{T} = \frac{\hbar^2}{2m}(\vec{k}+\vec{g})^2 
+\end{equation}
+and returns $\hat{T}$
+
+For the pseudopotential term, we have to consider the band choice. The first five of the reciprocal lattice vectors have squared magnitudes of 0,3,4,8,and 11 which are the only ones allowed to have nonzero potential. The symmetric structure factors is zero for $G^2$ = 4 and the antisymmetric factors are zero for $G^2 = 0 and 8 $. So overall we have six form factors to determine: 3 each of symmetric and antisymmetric. All these pseudopotential form factors, in rydbergs, derived from the experimental energy band splitting are read from the table in the Cohen and Bergstresser paper and populated into a switch case routine. 
+
+\begin{figure}[H]
+\includegraphics[width=9cm]{Pseudopotentials.png}% Here is how to import EPS art
+\caption{\label{fig:Hamiltonian} Table extracted from Cohen and Bergstreser Paper [1]}
+\end{figure}
+
+Then comes the structure factors. The symmetric structure factor (SS) and the antisymmetric structure factor(SA) are defined as follows: 
+
+\begin{equation}
+    SS = cos(\vec{G}^2)
+    SA = sin(\vec{G}^2)
+\end{equation}
+
+Then depending on the $g^2$ value, we calculate V with the equation : 
+\begin{equation}
+    V += (SS*VS + i *SA*VA)
+\end{equation}
+Where VS and VA come from the symmetric and antisymmetric pseudopotential form factors populated by the switch case statement. This function returns the potential as a Double. 
+
+Then the Hamiltonian function is defined with takes the name of the band, wave vector, and states as the input. 
+Since we are dealing with FCC lattice, we define the primitive vectors as: 
+
+b = $\begin{pmatrix}
+-1.0 & 1.0 & 1.0\\
+1.0 & -1.0 & 1.0\\
+1.0 & 1.0 & -1.0
+\end{pmatrix}$
+
+The size of the matrix is given by the number of reciprocal lattice vectors ($\vec{G}$) we use where
+\begin{equation}
+    \vec{G} = h \vec{b_1} + k \vec{b_2} + l \vec{b_3}
+\end{equation}
+and the coefficients h,k,l are set of integers centered around 0. For state = 3 for example, we calculate the coefficients as {-1,0,1}. These are obtained using some increment (m) that can cover all possible combinations of {h,k,l}. 
+
+The kinetic term of the Hamiltonian is non-zero only along the diagonal which is Incorporated into this function by calling it only for the diagonal elements of the Hamiltonian. For the off diagonal elements, only the potential term is called to populate the matrix. The final matrix returned has size $states^3 X states^3 $. \\
+
+\begin{figure}[H]
+\includegraphics[width=6cm]{Hamiltonian.png}% Here is how to import EPS art
+\caption{\label{fig:Hamiltonian} This is what the Hamiltonian matrix looks like}
+\end{figure}
+
+The resulting problem is a large eigenvalue problem for determining the energy and wave-vector relationship. These eigenvalues are later evaluated in the content view and is initiated by the button "Calculate".
+
+The parameter required for the functions used included lattice constants for all the solids of interest, mass of electron and plank's constant  
+variables: wave vector(\textbf{k}) values for moving from symmetry points L (0.5,0.5,0.5) to $\Gamma$(0,0,0), $\Gamma$ to X(1,0,0), X to W(1,0.5,0) , W to K(0.75,0.75,0) and finally K to $\Gamma$. 
+
+\begin{figure}[H]
+\includegraphics[width=6cm]{Brillouinzones.png}% Here is how to import EPS art
+\caption{\label{fig:Hamiltonian} Symmetry Points in the FCC Lattice[2]}
+\end{figure}
+
+
+The wave vectors (data points for moving from one symmetry point to another) were generated as follows:$k_vec$  is an array of 3D arrays which is passed to the content view. the calculate eigenvalue is evaluated for all of the the $k_vec$ by calling the Hamiltonian and diagonalizing it to get the flatarray which was appended to the eigenvalue array. 
+
+To plot this data all of the entries in the $k_vec$ were looped though and each sub 3D array in $k_vec$ was converted to its magnitude and plotted with all of the energy eigenvalues corresponding to the $k_vec$ since we have an array of eigenvalues for the Hamiltonian evaluated at each $k_vec$ .
+
+\subsection{\label{sec:level3}Conclusion}
+The project is getting stuck on some loop and does not output anything. One thing that has to probably be modified is the amount of calculation being done for the k-vectors generated. There are multiple nested loops in the path file as well as the content view file and revisiting and fixing them would probably be the first step to make this code work. 
+
+
+
+\appendix
+
+
+\subsection{\label{sec:level2}Refrences}
+
+[1] \href{https://journals.aps.org/pr/abstract/10.1103/PhysRev.141.789}{Band Structures and Pseudopotential Form Factors for Fourteen Semiconductors of the Diamond and Zinc-blende Structures} \\
+\bigskip
+
+[2]\href{http://esd.cos.gmu.edu/tb/kpts/fcc/index.html}{Symmetry Points Image}\\
+
+
+\end{document}
+%
+% ****** End of file apssamp.tex ******
